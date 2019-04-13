@@ -12,7 +12,7 @@ Here you can see the scheme of the connections:
 
 ## Main device components
 
-[Components](https://drive.google.com/file/d/1VEaIEV-VyCigxhlKwWAMkki0SpKL589s/view?usp=sharing)
+[Components](https://newskit.netlify.com/images/main.png)
 
 ### Create your own projects!
 
