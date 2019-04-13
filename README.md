@@ -2,17 +2,17 @@
 
 Multifunctional device for the visually impaired
 
-[Device photo](https://drive.google.com/file/d/1cu2u3XnNs0QoMtwvDz7Nq8_H8ZRfxILt/view?usp=sharing)
+[Device photo](https://user-images.githubusercontent.com/25267308/56082058-d361ad80-5e1c-11e9-969d-1635342a0ee6.png)
 
 ## Schematics
 
 Here you can see the scheme of the connections:
 
-[Scheme](https://drive.google.com/file/d/1nR99OP-Jbs-IgpEkui3Omll4GbVpokvW/view?usp=sharing)
+[Scheme](https://user-images.githubusercontent.com/25267308/56082052-c93faf00-5e1c-11e9-805f-3e61ef1e78f6.png)
 
 ## Main device components
 
-[Components](https://newskit.netlify.com/images/main.png)
+[Components](https://user-images.githubusercontent.com/25267308/56082054-ccd33600-5e1c-11e9-926b-3ee48f89be31.png)
 
 ### Create your own projects!
 
