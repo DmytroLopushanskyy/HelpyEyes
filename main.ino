@@ -1,13 +1,11 @@
 #include "SD.h"
 #define SD_ChipSelectPin 10
 #include "TMRpcm.h"
-//#include "SPI.h"
 #include <stdio.h>
 #include <Wire.h>
 
 TMRpcm tmrpcm;
 
-// Контакты TCS230 или TCS3200 для подключения к Arduino:
 #define S0 4
 //#define S1 5
 #define S2 7
@@ -21,15 +19,13 @@ int sensorPin = A0;   // select the analog input pin for the photoresistor
 int button_delay;
 int button_logic = 1;
 
- 
-// для хранения частоты, считанной фотодиодами:
 int redFrequency = 0;
 int greenFrequency = 0;
 int blueFrequency = 0;
 int measurement;
 String finalColor;
-String color;    // the number of the pushbutton pin
-boolean buttonWasLow = false;         // variable flag for when the pushbutton goes low
+String color;    
+boolean buttonWasLow = false;   // variable flag for when the pushbutton goes low
 static uint8_t lastBtnState = LOW;
 
 
@@ -42,9 +38,7 @@ long duration;
 int distance;
  
 void setup() {
-  // выставляем контакты S0, S1, S2 и S3 в режим OUTPUT:
   pinMode(S0, OUTPUT);
-//  pinMode(S1, OUTPUT);
   pinMode(S2, OUTPUT);
   pinMode(S3, OUTPUT);
   pinMode(BTN_PIN, INPUT);
@@ -53,7 +47,6 @@ void setup() {
   pinMode(echoPin, INPUT); // Sets the echoPin as an Input
   Serial.begin(9600);
   Wire.begin();
-  //Serial.println("Ура!Hurray!");
   if(!SD.begin(SD_ChipSelectPin))
   { 
     //Serial.println("SD fail");
@@ -63,14 +56,11 @@ void setup() {
   tmrpcm.speakerPin=9;
   tmrpcm.setVolume(6);
   tmrpcm.play("on.wav");
-  // выставляем контакт sensorOut в режим INPUT:
   pinMode(sensorOut, INPUT);
  
-  // задаем масштабирование частоты на 20%:
+  // set color sensor mapping to 20%:
   digitalWrite(S0,HIGH);
   //digitalWrite(S1,LOW);
-  // запускаем последовательную коммуникацию:
-
 }
  
 void loop() {
@@ -78,7 +68,6 @@ void loop() {
   if(!tmrpcm.isPlaying() or button_logic==3) {
       digitalWrite(tmrpcm.speakerPin, LOW);
       
-    
       if (button_delay > 20){
         //Serial.println("2 sec!"); 
         
@@ -162,24 +151,6 @@ void loop() {
           buttonWasLow = false;
           byte colorNum = detectColor();
           colorNum = (int) colorNum;
-//          //Serial.println("pressed!");  
-//          String colors[5];
-//          for (int i=0; i < 5; i++){
-//            //color = test();
-//            color = detectColor();
-//            //Serial.println(" " + color);  
-//            colors[i] = color;
-//         }  
-//         if (colors[0] == colors[1] and colors[0] == colors[2] and colors[0] == colors[3] or colors[0] == colors[1] and colors[0] == colors[2] and colors[0] == colors[4] or colors[0] == colors[1] and colors[0] == colors[4] and colors[0] == colors[3] or colors[0] == colors[4] and colors[0] == colors[2] and colors[0] == colors[3]){
-//            //Serial.println("FINAL COLOR: " + colors[0]);
-//            finalColor = colors[0];
-//         }else if(colors[4] == colors[1] and colors[4] == colors[2] and colors[4] == colors[3]){
-//            //Serial.println("FINAL COLOR: " + colors[4]);
-//            finalColor = colors[4];
-//         }else{
-//            //Serial.println("COLOR NOT DEFINED!");
-//            finalColor = "noColor";
-//         }
          if (colorNum % 3 == 2){
             tmrpcm.play("lig.wav");
             delay(1000);
@@ -216,41 +187,12 @@ void loop() {
          }else if(colorNum == 37){
             tmrpcm.play("mar.wav");
          }
-//         else if(finalColor == "noCo"){
-//            //Serial.println("here");
-//            tmrpcm.play("unknown.wav");
-//            delay(1000);
-//         }
-         
-         ////Serial.println(colors); 
       }
       
       if (button_logic == 3)  {
           buttonWasLow = false;
-          //delay(100);
-//           int distances[10];
-//           for (int b=0; b < 10; b++){
-//              distance = detectDistance(); 
-//              distances[b] = distance;
-//           }   
-           
-//          int count = 0;
           int finalNumber = 0;
           
-//          for (int i=0; i<10; i++){
-//            int maxNumber = distances[i] + 10;
-//            int minNumber = distances[i] - 10;
-//            for (int a=0; a<10; a++){
-//              if (distances[a] > minNumber and distances[a] < maxNumber) count++;
-//            }
-//            if (count > 5){
-//              finalNumber = distances[i];
-//              //Serial.println("Final Distance: " + String(distances[i]));
-//              count = 2002;
-//            }else{
-//              count = 0;
-//            }
-//          }
           finalNumber = detectDistance(); 
           
           if (finalNumber < 100 && finalNumber!=0){
@@ -261,29 +203,9 @@ void loop() {
       if (button_logic == 4)  {
           buttonWasLow = false;
           delay(100);
-//           int distances[10];
-//           for (int b=0; b < 10; b++){
-//              distance = detectDistance(); 
-//              distances[b] = distance;
-//           }   
-           
-//          int count = 0;
+       
           int finalNumber = 0;
-          
-//          for (int i=0; i<10; i++){
-//            int maxNumber = distances[i] + 10;
-//            int minNumber = distances[i] - 10;
-//            for (int a=0; a<10; a++){
-//              if (distances[a] > minNumber and distances[a] < maxNumber) count++;
-//            }
-//            if (count > 5){
-//              finalNumber = distances[i];
-//              //Serial.println("Final Distance: " + String(distances[i]));
-//              count = 2002;
-//            }else{
-//              count = 0;
-//            }
-//          }
+
           finalNumber = detectDistance(); 
           
           if (finalNumber < 400 && finalNumber!=0){
@@ -351,8 +273,7 @@ byte detectColor(){
   int diff[30];
   for (int i=0; i< 30; i++){
     diff[i] = abs((redFrequency - values[i][1])) + abs((greenFrequency - values[i][2]))+ abs((blueFrequency - values[i][3]));
-//    Serial.print(diff[i] );
-//    Serial.println("  ");
+  //Serial.print(diff[i] );
   }
   int minIndex = 0;
   int minValue = diff[minIndex];
@@ -365,14 +286,13 @@ byte detectColor(){
       }
   };
   //return colors[minIndex];
-//  Serial.println("Final:");
-//Serial.print(values[minIndex][0]);
-//  Serial.println("  ");
+  //Serial.println("Final:");
+  //Serial.print(values[minIndex][0]);
   return values[minIndex][0];
 }
 
 int detectDistance(){
-   // Clears the trigPin
+  // Clears the trigPin
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
   delayMicroseconds(10);
